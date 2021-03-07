@@ -1,0 +1,55 @@
+;;;; bb.setup -*- Scheme -*-
+
+(define (missing)
+  (error "Sorry, FLTK (http://www.fltk.org) must be installed to use this extension") )
+
+(use make)
+
+(case (build-platform)
+  [(mingw32)
+   (let ((flu (get-environment-variable "FLU")))
+     (make/proc
+       (list (list "bb-support.o" '("bb-support.cpp" "bb.h")
+		   (lambda ()
+		     (run (g++ -Os -fomit-frame-pointer -c
+			       -DWIN32 -mwindows -mno-cygwin
+			      ,(if flu (string-append "-DBB_USE_FLU -I" flu) "")
+			      bb-support.cpp))
+		     (run (g++ -Os -fomit-frame-pointer -c
+			       -DWIN32 -mwindows -mno-cygwin
+			       Table.cxx)) ) ) )
+       "bb-support.o")
+
+     (run (csc bb.scm -s -O3 -d1 -J
+	       -L "\"bb-support.o Table.o -lfltk\""
+	       -L "\"-lfltk_images -lfltk_gl -lfltk_jpeg -lfltk_png -lfltk_z\""
+	       -L "\"-luser32 -lopengl32 -lgdi32 -lole32 -luuid -lcomctl32\""
+	       -L "\"-lwsock32 -lshell32 -ladvapi32\""
+	       -lfltk -lole32 -luuid -lcomctl32 -lwsock32
+	       ,(if flu (string-append "-L \"-L" flu "/lib -lflu\"") "")
+	       -ld g++) ) )]
+  [else
+    (let ([has-flu? (zero? (system "flu-config --cxxflags >/dev/null"))])
+
+      (make/proc
+	(list (list "bb-support.o" '("bb-support.cpp" "bb.h")
+		    (lambda ()
+		      (run (g++ -g -fPIC -c
+				,(if has-flu? " `flu-config --cxxflags` -DBB_USE_FLU " "")
+				" `fltk-config --cflags` " bb-support.cpp))
+		      (run (g++ -g -fPIC -c
+				" `fltk-config --cflags` " Table.cxx))
+		      ) ) )
+	"bb-support.o")
+
+      (run (csc bb.scm -s -O3 -J -d1
+		-L "\"bb-support.o Table.o `fltk-config --use-images --use-gl --ldflags --libs`\""
+		,(if has-flu? "-L \"`flu-config --ldflags`\" -L \"`flu-config --libs`\" " "")
+		-ld g++) ) ) ] )
+
+(compile -s -O3 -d0 bb.import.scm)
+
+(install-extension
+ 'bb
+ '("bb.so" "bb.import.so")
+ `((version 1.32)))

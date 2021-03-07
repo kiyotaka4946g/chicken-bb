@@ -1,0 +1,8 @@
+;;; bb.meta -*- Scheme -*-
+
+((synopsis "An easy-to-use GUI toolkit based on FLTK")
+ (license "BSD")
+ (category ui)
+ (needs silex easyffi matchable make)
+ (author "felix winkelmann")
+ (files "bb.setup" "bb.h" "bb.scm" "bb-support.cpp" "Table.h" "Table.cxx" "tests"))
