@@ -45,15 +45,12 @@
 
 (import scheme chicken foreign)
 
-(use extras srfi-1 utils srfi-4 easyffi data-structures matchable)
+(use extras srfi-1 utils srfi-4 bind data-structures matchable)
 
-(foreign-parse/declare #<<EOF
+(bind-rename/pattern "BB_?" "bb:")
+(bind* #<<EOF
 
 #define BBEXPORT
-
-#ifdef CHICKEN
-___declare(substitute, "BB_?;bb:")
-#endif
 
 typedef ___scheme_value WIDGET;
 
@@ -807,7 +804,7 @@ EOF
 	  (bb:RemoveImage w) )
       (bb:RemoveItem w (let ([i (car x)]) (if (eq? i #t) -1 i))) ) )
 
-(foreign-parse/declare #<<EOF
+(bind* #<<EOF
 
 static void ReleasePointers(void **lst)
 {
