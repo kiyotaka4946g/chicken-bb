@@ -43,10 +43,16 @@
 	    bb:render bb:element? bb:element-widget bb:element-children bb:element-parent bb:element-id
 	    bb:element-tag bb:element-attributes)
 
-(import scheme chicken.base chicken.process-context chicken.plist chicken.fixnum chicken.format
-		chicken.foreign chicken.string chicken.bitwise srfi-2 srfi-11 srfi-23 srfi-26)
+(import scheme)
 
-(import srfi-1 srfi-4 bind matchable)
+(cond-expand
+	(chicken-4
+		(import chicken foreign)
+		(use extras srfi-1 utils srfi-4 bind data-structures matchable))
+	(else 
+		(import chicken.base chicken.process-context chicken.plist chicken.fixnum chicken.format
+		chicken.foreign chicken.string chicken.bitwise srfi-2 srfi-11 srfi-23 srfi-26)
+		(import srfi-1 srfi-4 bind matchable)))
 
 (bind-rename/pattern "BB_?" "bb:")
 (bind* #<<EOF
