@@ -14,10 +14,3 @@
 		(csc-options  "-s" "-J" "-d1")
 		(link-options "-L" "-lfltk_images" "-L" "-lpng" "-L" "-lz" "-L" "-ljpeg" "-L" "-lfltk_gl" "-L" "-lGLU" "-L" "-lGL" "-L" "-lfltk" "-L" "-lm" "-L" "-lX11" "-L" "-lXext" "-L" "-lpthread" "-L" "-lXinerama" "-L" "-lXfixes" "-L" "-lXcursor" "-L" "-lXft" "-L" "-lXrender" "-L" "-lfontconfig" "-L" "-ldl")
 		)))
-;;;NOTE:Converted from bb.setup.but not works.
-;`fltk-config --use-images --use-gl --ldflags --libs`
-;`flu-config --ldflags` `flu-config --libs` g++ -g -fPIC -c
-;		(csc-options  "-s" "-O3" "-J" "-d1")
-;		 ("/usr/lib/libfltk_images.a" "/usr/lib/libfltk_gl.a" "/usr/lib/libfltk.a")
-;		(custom-build g++ "-g" "-fPIC" "-c" "-D_FORTIFY_SOURCE=2" "-march=x86-64" "-mtune=generic" "-O2" "-pipe" "-fno-plt" "-D_THREAD_SAFE" "-D_REENTRANT" "-D_FILE_OFFSET_BITS=64" "-D_LARGEFILE_SOURCE" "-D_LARGEFILE64_SOURCE"))
-;		(custom-build "g++ -g -fPIC -c -D_FORTIFY_SOURCE=2 -march=x86-64 -mtune=generic -O2 -pipe -fno-plt -D_THREAD_SAFE -D_REENTRANT -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE bb-support.cpp"))
